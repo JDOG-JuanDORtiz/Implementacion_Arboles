@@ -28,10 +28,30 @@ NodoGeneral<T>* obtenerRaiz() { return this->raiz; }
 void fijarRaiz(NodoGeneral<T>* nraiz) { this->raiz = nraiz; }
 
 <template T>
-bool insertarNodo(T& padre, T& n);
+bool insertarNodo(T& padre, T& n){
+	//si el arbol es vacío:
+	//crear nuevo nodo, asignar dato, poner ese nodo como raiz
+	//
+	//si hay al menos un nodo en el árbol:
+	//- revisar el nodo donde estoy para ver si coincide con padre
+	//- si es padre, insertar ahí el nuevo hijo
+	//- si no es el padre, revisar cada nodo hijo y llamar insertar allí
+}
 
 <template T>
-bool eliminarNodo(T& n);
+bool eliminarNodo(T& n){
+	//si el árbol es vacío:
+	//retornar
+	//
+	//si es la raiz la que quiero eliminar:
+	//-hacer delete a raiz
+	//-poner raiz en nulo
+	//
+	//si hay al menos un nodo en el arbol:
+	//- si alguno de los hijos es al que quiero eliminar
+	//- si ninguno de los hijos es el que quiero eliminar:
+	//- revisar cada nodo hijo y llamar eliminar allí
+}
 
 <template T>
 bool buscar(T& n);
@@ -56,8 +76,8 @@ unsigned int altura(NodoGeneral<T>* nodo){
 		std::list< NodoGeneral<T>* >::iterator it;
 		for (it = nodo->desc.begin(); it != nodo->desc.end(); it++){
 			alturaHijo = this->altura(*it);
-			if(alturaHijo>alt){
-				alt=alturaHijo;
+			if(alturaHijo+1>alt){
+				alt=alturaHijo+1;
 			}
 		}
 	}
@@ -68,10 +88,36 @@ unsigned int altura(NodoGeneral<T>* nodo){
 unsigned int tamano();
 
 <template T>
-void preOrden();
+void preOrden(){
+	if(!this->esVacio())
+		this->preOrden(this->raiz);
+}
 
 <template T>
-void posOrden();
+void preOrden(NodoGeneral<T>* nodo){
+	std::cout << nodo->obtenerDato()<<" ";
+	
+	std::list< NodoGeneral<T>* >::iterator it;
+	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
+		this->preOrden(*it);
+	}
+}
+
+<template T>
+void posOrden(){
+	if(!this->esVacio())
+		this->posOrden(this->raiz);
+
+}
+
+void posOrden(){
+	std::list< NodoGeneral<T>* >::iterator it;
+	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
+		this->posOrden(*it);
+	}
+
+	std::cout << nodo->obtenerDato()<<" ";
+}
 
 <template T>
 void nivelesOrden();
