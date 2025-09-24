@@ -2,6 +2,7 @@
 #define __ARBOLGENERAL_H__
 
 #include "NodoGeneral.h"
+#include <queue>
 
 template <class T>
 class ArbolGeneral {

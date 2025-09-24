@@ -42,16 +42,44 @@ bool insertarNodo(T& padre, T& n){
 bool eliminarNodo(T& n){
 	//si el árbol es vacío:
 	//retornar
-	//
+	if(this->esVacio()){
+		return false;
+	}
+
 	//si es la raiz la que quiero eliminar:
 	//-hacer delete a raiz
 	//-poner raiz en nulo
-	//
+	if(this->raiz->obtenerDato() == n){
+		delete this->raiz;
+		this->raiz=NULL;
+		return true;
+	}
+
 	//si hay al menos un nodo en el arbol:
 	//- si alguno de los hijos es al que quiero eliminar
 	//- si ninguno de los hijos es el que quiero eliminar:
 	//- revisar cada nodo hijo y llamar eliminar allí
+	return this->eliminarNodo(n, this->raiz);
 }
+
+<template T>
+bool eliminarNodo(T& n, NodoGeneral<T>* nodo){
+	std::list< NodoGeneral<T>* >::iterator it;
+	bool eliminado=false;
+	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
+		if((*it)->obtenerDato()==n){
+			delete *it;
+			nodo->desc.erase(it);
+			return true;
+		}
+		eliminado = this->eliminarNodo(n, *it);
+		if(eliminado == true){
+			return true;
+		}
+	}
+	return false;
+}
+
 
 <template T>
 bool buscar(T& n);
@@ -85,7 +113,24 @@ unsigned int altura(NodoGeneral<T>* nodo){
 }
 
 <template T>
-unsigned int tamano();
+unsigned int tamano(){
+	if(this->esVacio())
+		return 0;
+	tamano(raiz);
+}
+
+<template T>
+unsigned int tamano(NodoGeneral<T>* nodo){
+	if(nodo->esHoja()){
+		return 1;
+	}
+	std::list< NodoGeneral<T>* >::iterator it;
+	int tamano=0;
+	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
+		tamano+=tamano(*it);
+	}
+	return tamano+1;
+}
 
 <template T>
 void preOrden(){
@@ -120,5 +165,17 @@ void posOrden(){
 }
 
 <template T>
-void nivelesOrden();
+void nivelesOrden(){
+	std::queue< NodoGeneral<T>* > colaNivel;
+	colaNivel.push(this->raiz);
+	while(colaNivel.size()!=0){
+		NodoGeneral<T>* dato = colaNivel.front();
+		std::cout << dato->obtenerDato()<<" ";
+		std::list< NodoGeneral<T>* >::iterator it;
+		for(it=dato->desc.begin(); it!=dato->desc.begin(); it++){
+			colaNivel.push(*it);
+		}
+		colaNivel.pop();
+	}
+}
 
