@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-/*#include <bits/stdc++.h>*/
 #include "ArbolGeneral.h"
 #include "NodoGeneral.h"
 
@@ -27,7 +26,7 @@ int main(){
     //impresion de recorridos
     cout<<"PreOrden"<<endl;
     arbol.preOrden();
-    cout<<"inOrden"<<endl;
+    cout<<"Por niveles"<<endl;
     arbol.nivelesOrden();
     cout<<"posOrden"<<endl;
     arbol.posOrden();
@@ -36,7 +35,7 @@ int main(){
     // Eliminacion de un nodo
     int elim = 2;
     arbol.eliminarNodo(elim);
-    cout<<"inOrden"<<endl;
+    cout<<"Por niveles"<<endl;
     arbol.nivelesOrden();
     return 0;
 
