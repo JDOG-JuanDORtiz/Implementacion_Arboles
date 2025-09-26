@@ -32,6 +32,8 @@ int main(){
     arbol.posOrden();
     cout<<"tamano "<<arbol.tamano()<<endl;
     cout<<"altura "<<arbol.altura()<<endl;
+    cout<<"Buscar 4: "<<arbol.buscar(4)<<endl;
+    cout<<"Buscar 18: "<<arbol.buscar(18)<<endl;
     // Eliminacion de un nodo
     int elim = 2;
     arbol.eliminarNodo(elim);
