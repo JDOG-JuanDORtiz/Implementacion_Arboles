@@ -1,36 +1,45 @@
 #include "ArbolGeneral.h"
 
-<template T>
-ArbolGeneral::ArbolGeneral(){
+template <class T>
+ArbolGeneral<T>::ArbolGeneral(){
 	this->raiz= NULL;
 }
 
-<template T>
-ArbolGeneral(T& val){
+template <class T>
+ArbolGeneral<T>::ArbolGeneral(T val){
 	NodoGeneral<T> *nodo = new NodoGeneral<T>;
 	nodo->fijarDato(val); 
 	this->raiz = nodo;
 }
 
-<template T>
-~ArbolGeneral(){
+template <class T>
+ArbolGeneral<T>::~ArbolGeneral(){
 	delete this->raiz;
 	this->raiz = NULL;
 }
 
-<template T>
-bool esVacio(){ return this->raiz == NULL; }
+template <class T>
+bool ArbolGeneral<T>::esVacio(){ return this->raiz == NULL; }
 
-<template T>
-NodoGeneral<T>* obtenerRaiz() { return this->raiz; }
+template <class T>
+NodoGeneral<T>* ArbolGeneral<T>::obtenerRaiz() { return this->raiz; }
 
-<template T>
-void fijarRaiz(NodoGeneral<T>* nraiz) { this->raiz = nraiz; }
+template <class T>
+void ArbolGeneral<T>::fijarRaiz(NodoGeneral<T>* nraiz) { this->raiz = nraiz; }
 
-<template T>
-bool insertarNodo(T& padre, T& n){
+template <class T>
+bool ArbolGeneral<T>::insertarNodo(T padre, T n){
 	//si el arbol es vacío:
 	//crear nuevo nodo, asignar dato, poner ese nodo como raiz
+	if(this->esVacio()){
+		NodoGeneral<T> *nodo = new NodoGeneral<T>;
+		nodo->fijarDato(n);
+		this->fijarRaiz(nodo);
+		return true;
+	}
+
+	return insertarNodo(this->raiz, padre, n);
+	
 	//
 	//si hay al menos un nodo en el árbol:
 	//- revisar el nodo donde estoy para ver si coincide con padre
@@ -38,8 +47,23 @@ bool insertarNodo(T& padre, T& n){
 	//- si no es el padre, revisar cada nodo hijo y llamar insertar allí
 }
 
-<template T>
-bool eliminarNodo(T& n){
+template <class T>
+bool ArbolGeneral<T>::insertarNodo(NodoGeneral<T>* nodo, T padre, T n){
+	if(nodo->obtenerDato() == padre){
+		nodo->adicionarDesc(n);
+		return true;
+	}
+	typename std::list< NodoGeneral<T>* >::iterator it;
+	bool insertado=false;
+	for(it = nodo->desc.begin() ; it != nodo->desc.end() ; it++){
+		insertado = insertarNodo(*it, padre, n);
+		if(insertado == true){return true;}
+	}
+	return false;
+}
+
+template <class T>
+bool ArbolGeneral<T>::eliminarNodo(T n){
 	//si el árbol es vacío:
 	//retornar
 	if(this->esVacio()){
@@ -62,9 +86,9 @@ bool eliminarNodo(T& n){
 	return this->eliminarNodo(n, this->raiz);
 }
 
-<template T>
-bool eliminarNodo(T& n, NodoGeneral<T>* nodo){
-	std::list< NodoGeneral<T>* >::iterator it;
+template <class T>
+bool ArbolGeneral<T>::eliminarNodo(T n, NodoGeneral<T>* nodo){
+	typename std::list< NodoGeneral<T>* >::iterator it;
 	bool eliminado=false;
 	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
 		if((*it)->obtenerDato()==n){
@@ -81,11 +105,31 @@ bool eliminarNodo(T& n, NodoGeneral<T>* nodo){
 }
 
 
-<template T>
-bool buscar(T& n);
+template <class T>
+bool ArbolGeneral<T>::buscar(T n){
+	if(this->esVacio()){
+		return false;
+	}
+	return buscar(this->raiz, n);
+}
 
-<template T>
-unsigned int altura(){
+template <class T>
+bool ArbolGeneral<T>::buscar(NodoGeneral<T>* nodo, T n){
+	if(nodo->obtenerDato()==n){
+		return true;
+	}
+	typename std::list< NodoGeneral<T> * >::iterator it;
+	bool encontrado;
+	for(it = nodo->desc.begin(); it != nodo->desc.end() ; it++){
+		encontrado = buscar(*it, n);
+		if(encontrado==true)
+			return true;
+	}
+	return false;
+}
+
+template <class T>
+unsigned int ArbolGeneral<T>::altura(){
 	if(this->esVacio()){
 		return -1;
 	} else {
@@ -94,14 +138,14 @@ unsigned int altura(){
 
 }
 
-<template T>
-unsigned int altura(NodoGeneral<T>* nodo){
+template <class T>
+unsigned int ArbolGeneral<T>::altura(NodoGeneral<T>* nodo){
 	int alt=-1, alturaHijo;
 
-	if(nodo->EsHoja()){
+	if(nodo->esHoja()){
 		alt=0;
 	} else{
-		std::list< NodoGeneral<T>* >::iterator it;
+		typename std::list< NodoGeneral<T>* >::iterator it;
 		for (it = nodo->desc.begin(); it != nodo->desc.end(); it++){
 			alturaHijo = this->altura(*it);
 			if(alturaHijo+1>alt){
@@ -112,51 +156,54 @@ unsigned int altura(NodoGeneral<T>* nodo){
 	return alt;
 }
 
-<template T>
-unsigned int tamano(){
+template <class T>
+unsigned int ArbolGeneral<T>::tamano(){
 	if(this->esVacio())
 		return 0;
-	tamano(raiz);
+	return tamano(raiz);
 }
 
-<template T>
-unsigned int tamano(NodoGeneral<T>* nodo){
+template <class T>
+unsigned int ArbolGeneral<T>::tamano(NodoGeneral<T>* nodo){
 	if(nodo->esHoja()){
 		return 1;
 	}
-	std::list< NodoGeneral<T>* >::iterator it;
-	int tamano=0;
+	typename std::list< NodoGeneral<T>* >::iterator it;
+	int tamanoArbol=0;
 	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
-		tamano+=tamano(*it);
+		tamanoArbol+=tamano(*it);
 	}
-	return tamano+1;
+	return tamanoArbol+1;
 }
 
-<template T>
-void preOrden(){
+template <class T>
+void ArbolGeneral<T>::preOrden(){
 	if(!this->esVacio())
 		this->preOrden(this->raiz);
+		
+	std::cout <<"\n";
 }
 
-<template T>
-void preOrden(NodoGeneral<T>* nodo){
+template <class T>
+void ArbolGeneral<T>::preOrden(NodoGeneral<T>* nodo){
 	std::cout << nodo->obtenerDato()<<" ";
 	
-	std::list< NodoGeneral<T>* >::iterator it;
+	typename std::list< NodoGeneral<T>* >::iterator it;
 	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
 		this->preOrden(*it);
 	}
 }
 
-<template T>
-void posOrden(){
+template <class T>
+void ArbolGeneral<T>::posOrden(){
 	if(!this->esVacio())
 		this->posOrden(this->raiz);
-
+	std::cout <<"\n";
 }
 
-void posOrden(){
-	std::list< NodoGeneral<T>* >::iterator it;
+template <class T>
+void ArbolGeneral<T>::posOrden(NodoGeneral<T>* nodo){
+	typename std::list< NodoGeneral<T>* >::iterator it;
 	for(it=nodo->desc.begin(); it!=nodo->desc.end(); it++){
 		this->posOrden(*it);
 	}
@@ -164,18 +211,20 @@ void posOrden(){
 	std::cout << nodo->obtenerDato()<<" ";
 }
 
-<template T>
-void nivelesOrden(){
+template <class T>
+void ArbolGeneral<T>::nivelesOrden(){
 	std::queue< NodoGeneral<T>* > colaNivel;
 	colaNivel.push(this->raiz);
 	while(colaNivel.size()!=0){
 		NodoGeneral<T>* dato = colaNivel.front();
 		std::cout << dato->obtenerDato()<<" ";
-		std::list< NodoGeneral<T>* >::iterator it;
-		for(it=dato->desc.begin(); it!=dato->desc.begin(); it++){
+		typename std::list< NodoGeneral<T>* >::iterator it;
+		for(it=dato->desc.begin(); it!=dato->desc.end(); it++){
 			colaNivel.push(*it);
 		}
 		colaNivel.pop();
 	}
+	
+	std::cout <<"\n";
 }
 

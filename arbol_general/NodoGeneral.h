@@ -8,15 +8,15 @@ template< class T >
 class NodoGeneral {
 	protected:
 		T dato;
-		std::list< NodoGeneral<T>* > desc;
 	public:
+		std::list< NodoGeneral<T>* > desc;
 		NodoGeneral();
 		~NodoGeneral();
-		T& obtenerDato();
-		void fijarDato(T& val);
+		T obtenerDato();
+		void fijarDato(T val);
 		void limpiarLista();
-		void adicionarDesc(T& nval);
-		void eliminarDesc(T& val);
+		void adicionarDesc(T nval);
+		bool eliminarDesc(T val);
 		bool esHoja();
 };
 
