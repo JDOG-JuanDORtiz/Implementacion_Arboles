@@ -14,8 +14,10 @@ ArbolGeneral<T>::ArbolGeneral(T val){
 
 template <class T>
 ArbolGeneral<T>::~ArbolGeneral(){
-	delete this->raiz;
-	this->raiz = NULL;
+	if (this->raiz != NULL){
+    	delete this->raiz;
+		this->raiz = NULL;
+	}
 }
 
 template <class T>
