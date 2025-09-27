@@ -168,7 +168,7 @@ bool ArbolBinarioOrd<T>::eliminarNodo(T n){
         }
 
         //Caso: Tienen dos hijos
-        else if(nodo->obtenerHijoDer()!=nullptr && nodo->obtenerHijoIzq()){
+        else if(nodo->obtenerHijoDer()!=nullptr && nodo->obtenerHijoIzq()!=nullptr){
             NodoBinario<T>* mayorSubIzq=nodo->obtenerHijoIzq();
             NodoBinario<T>* padreMayor=nodo;
             NodoBinario<T>* izq;

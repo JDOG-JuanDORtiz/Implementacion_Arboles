@@ -3,6 +3,7 @@
 
 #include "NodoAVL.h"
 #include <queue>
+#include <stack>
 
 template <class T>
 class ArbolAVL{
@@ -32,10 +33,10 @@ class ArbolAVL{
 		void nivelesOrden();
         void inOrden();
         void inOrden(NodoAVL<T>* nodo);
-		NodoAVL<T>* giroDerecha(NodoAVL<T>* &n2);
-		NodoAVL<T>* giroDerechaIzquierda();
-		NodoAVL<T>* giroIzquierda();
-		NodoAVL<T>* giroIzquierdaDerecha();
+		NodoAVL<T>* giroDerecha(NodoAVL<T>* n2);
+		NodoAVL<T>* giroDerechaIzquierda(NodoAVL<T>* n1);
+		NodoAVL<T>* giroIzquierda(NodoAVL<T>* n1);
+		NodoAVL<T>* giroIzquierdaDerecha(NodoAVL<T>* n1);
 };
 
 #include "ArbolAVL.hxx"

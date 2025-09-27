@@ -39,6 +39,11 @@ T ArbolAVL<T>::datoRaiz(){
 }
 
 template<class T>
+void ArbolAVL<T>::fijarRaiz(NodoAVL<T>* nraiz){
+    this->raiz=nraiz;
+}
+
+template<class T>
 int ArbolAVL<T>::altura(){
     if(this->esVacio())
         return -1;
@@ -75,6 +80,7 @@ bool ArbolAVL<T>::insertarNodo(T n){
         this->raiz=nuevoNodo;
         return true;
     }
+    std::stack< NodoAVL<T>* > camino;
     NodoAVL<T>* nodo = this->raiz;
     NodoAVL<T>* padre= this->raiz;
     bool insertado = false;
@@ -82,6 +88,7 @@ bool ArbolAVL<T>::insertarNodo(T n){
 
     while(nodo != nullptr){
         padre = nodo;
+        camino.push(nodo);
         if(n < nodo->obtenerDato()){
             nodo = nodo->obtenerHijoIzq();
         }else if ( n > nodo->obtenerDato()){
@@ -104,6 +111,129 @@ bool ArbolAVL<T>::insertarNodo(T n){
             }
             insertado = true;
         }
+        while(!camino.empty()){
+            NodoAVL<T>* nodoEvaluado = camino.top(); 
+            camino.pop();
+            std::cout<<"\nCamino"<<nodoEvaluado->obtenerDato()<<" ";
+            int hijoIzq, hijoDer, nietoIzq, nietoDer;
+            if(nodoEvaluado->obtenerHijoIzq()!=nullptr)
+                hijoIzq=altura(nodoEvaluado->obtenerHijoIzq())+1;
+            else
+                hijoIzq=0;
+            if(nodoEvaluado->obtenerHijoDer()!=nullptr)
+                hijoDer=altura(nodoEvaluado->obtenerHijoDer())+1;
+            else
+                hijoDer=0;
+            std::cout<<"\tAlt izq: "<<hijoIzq<<"\tAlt der: "<<hijoDer;
+
+            if((hijoIzq-hijoDer)==2){
+                std::cout<<"\nArbol izquierdo mas grande: ";
+                if(nodoEvaluado->obtenerHijoIzq()->obtenerHijoIzq()!=nullptr)
+                    nietoIzq=altura(nodoEvaluado->obtenerHijoIzq()->obtenerHijoIzq())+1;
+                else
+                    nietoIzq=0;
+                if(nodoEvaluado->obtenerHijoIzq()->obtenerHijoDer()!=nullptr)
+                    nietoDer=altura(nodoEvaluado->obtenerHijoIzq()->obtenerHijoDer())+1;
+                else
+                    nietoDer=0;
+                std::cout<<"\tAlt nieto izq: "<<nietoIzq<<"\tAlt nieto der: "<<nietoDer;
+                if(nietoIzq-nietoDer>0){
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroDerecha(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoIzq(this->giroDerecha(nodoEvaluado));
+                }
+                else{
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroIzquierdaDerecha(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoIzq(this->giroIzquierdaDerecha(nodoEvaluado));
+                }
+            }
+            else if((hijoIzq-hijoDer)==-2){
+                std::cout<<"\nArbol Derecho mas grande: ";
+                if(nodoEvaluado->obtenerHijoDer()->obtenerHijoIzq()!=nullptr)
+                    nietoIzq=altura(nodoEvaluado->obtenerHijoDer()->obtenerHijoIzq())+1;
+                else
+                    nietoIzq=0;
+                if(nodoEvaluado->obtenerHijoDer()->obtenerHijoDer()!=nullptr)
+                    nietoDer=altura(nodoEvaluado->obtenerHijoDer()->obtenerHijoDer())+1;
+                else
+                    nietoDer=0;
+                std::cout<<"\tAlt nieto izq: "<<nietoIzq<<"\tAlt nieto der: "<<nietoDer;
+                if((nietoIzq-nietoDer)<0){
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroIzquierda(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoDer(this->giroIzquierda(nodoEvaluado));
+                }
+                else{
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroDerechaIzquierda(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoDer(this->giroDerechaIzquierda(nodoEvaluado));
+                }
+            }
+        }
+        std::cout<<"\nNueva raiz: "<<this->raiz->obtenerDato();
+        /*while(!camino.empty()){
+            NodoAVL<T>* nodoEvaluado = camino.top();
+            camino.pop();
+            int hijoIzq, hijoDer, nietoIzq, nietoDer;
+            if(nodoEvaluado->obtenerHijoIzq()!=nullptr)
+                hijoIzq=altura(nodoEvaluado->obtenerHijoIzq());
+            else
+                hijoIzq=0;
+            if(nodoEvaluado->obtenerHijoDer()!=nullptr)
+                hijoDer=altura(nodoEvaluado->obtenerHijoDer());
+            else
+                hijoDer=0;
+
+            std::cout<<"\nnodo: "<<nodoEvaluado->obtenerDato()<<" Alt izq: "<<hijoIzq<<" Alt der: "<<hijoDer<<"\n";
+
+            if((hijoIzq-hijoDer)==2){
+                if(nodoEvaluado->obtenerHijoIzq()->obtenerHijoIzq()!=nullptr)
+                    nietoIzq=altura(nodoEvaluado->obtenerHijoIzq()->obtenerHijoIzq());
+                else
+                    nietoIzq=0;
+                if(nodoEvaluado->obtenerHijoIzq()->obtenerHijoDer()!=nullptr)
+                    nietoDer=altura(nodoEvaluado->obtenerHijoIzq()->obtenerHijoDer());
+                else
+                    nietoDer=0;
+                if(nietoIzq-nietoDer>0){
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroDerecha(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoIzq(this->giroDerecha(nodoEvaluado));
+                }
+                else
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroIzquierdaDerecha(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoIzq(this->giroIzquierdaDerecha(nodoEvaluado));
+            }
+            else if((hijoIzq-hijoDer)==-2){
+                if(nodoEvaluado->obtenerHijoDer()->obtenerHijoIzq()!=nullptr)
+                    nietoIzq=altura(nodoEvaluado->obtenerHijoDer()->obtenerHijoIzq());
+                else
+                    nietoIzq=0;
+                if(nodoEvaluado->obtenerHijoDer()->obtenerHijoDer()!=nullptr)
+                    nietoDer=altura(nodoEvaluado->obtenerHijoDer()->obtenerHijoDer());
+                else
+                    nietoDer=0;
+                if((nietoIzq-nietoDer)>0){
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroIzquierda(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoDer(this->giroIzquierda(nodoEvaluado));
+                }
+                else
+                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
+                        this->fijarRaiz(this->giroDerechaIzquierda(nodoEvaluado));
+                    else
+                        camino.top()->fijarHijoDer(this->giroDerechaIzquierda(nodoEvaluado));
+            }
+        }*/
     }
 
     return insertado; 
@@ -309,7 +439,7 @@ void ArbolAVL<T>::inOrden(NodoAVL<T>* nodo){
 }
 
 template<class T>
-NodoAVL<T>* ArbolAVL::giroDerecha(NodoAVL<T>* &n2){
+NodoAVL<T>* ArbolAVL<T>::giroDerecha(NodoAVL<T>* n2){
     NodoAVL<T>* n_padre = n2->obtenerHijoIzq();
     n2->fijarHijoIzq(n_padre->obtenerHijoDer());
     n_padre->fijarHijoDer(n2);
@@ -317,15 +447,16 @@ NodoAVL<T>* ArbolAVL::giroDerecha(NodoAVL<T>* &n2){
 }
 
 template<class T>
-NodoAVL<T>* ArbolAVL::giroDerechaIzquierda(NodoAVL<T>* &n1){
-    NodoAVL<T>* n_padre;
+NodoAVL<T>* ArbolAVL<T>::giroDerechaIzquierda(NodoAVL<T>* n1){
+    NodoAVL<T> *n_padre, *aux;
     aux = this->giroDerecha(n1->obtenerHijoDer());
     n1->fijarHijoDer(aux);
     n_padre = this->giroIzquierda(n1);
+    return n_padre;
 }
 
 template<class T>
-NodoAVL<T>* ArbolAVL::giroIzquierda(NodoAVL<T>* &n1){
+NodoAVL<T>* ArbolAVL<T>::giroIzquierda(NodoAVL<T>* n1){
     NodoAVL<T>* n_padre = n1->obtenerHijoDer();
     n1->fijarHijoDer(n_padre->obtenerHijoIzq());
     n_padre->fijarHijoIzq(n1);
@@ -333,9 +464,10 @@ NodoAVL<T>* ArbolAVL::giroIzquierda(NodoAVL<T>* &n1){
 }
 
 template<class T>
-NodoAVL<T>* ArbolAVL::giroIzquierdaDerecha(NodoAVL<T>* &n1){
-    NodoAVL<T>* n_padre;
+NodoAVL<T>* ArbolAVL<T>::giroIzquierdaDerecha(NodoAVL<T>* n1){
+    NodoAVL<T> *n_padre, *aux;
     aux = this->giroIzquierda(n1->obtenerHijoIzq());
     n1->fijarHijoIzq(aux);
     n_padre = this->giroDerecha(n1);
+    return n_padre;
 }
