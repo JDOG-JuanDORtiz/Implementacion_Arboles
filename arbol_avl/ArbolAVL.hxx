@@ -176,64 +176,6 @@ bool ArbolAVL<T>::insertarNodo(T n){
             }
         }
         std::cout<<"\nNueva raiz: "<<this->raiz->obtenerDato();
-        /*while(!camino.empty()){
-            NodoAVL<T>* nodoEvaluado = camino.top();
-            camino.pop();
-            int hijoIzq, hijoDer, nietoIzq, nietoDer;
-            if(nodoEvaluado->obtenerHijoIzq()!=nullptr)
-                hijoIzq=altura(nodoEvaluado->obtenerHijoIzq());
-            else
-                hijoIzq=0;
-            if(nodoEvaluado->obtenerHijoDer()!=nullptr)
-                hijoDer=altura(nodoEvaluado->obtenerHijoDer());
-            else
-                hijoDer=0;
-
-            std::cout<<"\nnodo: "<<nodoEvaluado->obtenerDato()<<" Alt izq: "<<hijoIzq<<" Alt der: "<<hijoDer<<"\n";
-
-            if((hijoIzq-hijoDer)==2){
-                if(nodoEvaluado->obtenerHijoIzq()->obtenerHijoIzq()!=nullptr)
-                    nietoIzq=altura(nodoEvaluado->obtenerHijoIzq()->obtenerHijoIzq());
-                else
-                    nietoIzq=0;
-                if(nodoEvaluado->obtenerHijoIzq()->obtenerHijoDer()!=nullptr)
-                    nietoDer=altura(nodoEvaluado->obtenerHijoIzq()->obtenerHijoDer());
-                else
-                    nietoDer=0;
-                if(nietoIzq-nietoDer>0){
-                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
-                        this->fijarRaiz(this->giroDerecha(nodoEvaluado));
-                    else
-                        camino.top()->fijarHijoIzq(this->giroDerecha(nodoEvaluado));
-                }
-                else
-                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
-                        this->fijarRaiz(this->giroIzquierdaDerecha(nodoEvaluado));
-                    else
-                        camino.top()->fijarHijoIzq(this->giroIzquierdaDerecha(nodoEvaluado));
-            }
-            else if((hijoIzq-hijoDer)==-2){
-                if(nodoEvaluado->obtenerHijoDer()->obtenerHijoIzq()!=nullptr)
-                    nietoIzq=altura(nodoEvaluado->obtenerHijoDer()->obtenerHijoIzq());
-                else
-                    nietoIzq=0;
-                if(nodoEvaluado->obtenerHijoDer()->obtenerHijoDer()!=nullptr)
-                    nietoDer=altura(nodoEvaluado->obtenerHijoDer()->obtenerHijoDer());
-                else
-                    nietoDer=0;
-                if((nietoIzq-nietoDer)>0){
-                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
-                        this->fijarRaiz(this->giroIzquierda(nodoEvaluado));
-                    else
-                        camino.top()->fijarHijoDer(this->giroIzquierda(nodoEvaluado));
-                }
-                else
-                    if(nodoEvaluado->obtenerDato() == this->raiz->obtenerDato())
-                        this->fijarRaiz(this->giroDerechaIzquierda(nodoEvaluado));
-                    else
-                        camino.top()->fijarHijoDer(this->giroDerechaIzquierda(nodoEvaluado));
-            }
-        }*/
     }
 
     return insertado; 
